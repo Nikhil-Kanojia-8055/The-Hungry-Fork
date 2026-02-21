@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Hungry Fork by Nikhil Kanojia</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    background:linear-gradient(135deg,#0f172a,#1e293b);
+    color:white;
+    overflow-x:hidden;
+}
+
+.main-content{
+    margin-right:320px;
+}
+
+/* NAVBAR */
+nav{
+    position:fixed;
+    top:0;
+    width:calc(100% - 320px);
+    padding:15px 50px;
+    background:rgba(0,0,0,0.6);
+    backdrop-filter:blur(15px);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    z-index:1000;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:700;
+    color:#ff4d4d;
+}
+
+nav ul{
+    list-style:none;
+    display:flex;
+    gap:30px;
+}
+
+nav ul li{
+    cursor:pointer;
+}
+
+nav ul li:hover{
+    color:#ff4d4d;
+}
+
+/* HERO */
+.hero{
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    background:linear-gradient(rgba(0,0,0,0.7),rgba(0,0,0,0.7)),
+    url("https://images.unsplash.com/photo-1504674900247-0877df9cc836");
+    background-size:cover;
+    background-position:center;
+}
+
+.hero h1{
+    font-size:55px;
+}
+
+.hero p{
+    margin-top:20px;
+    font-size:20px;
+}
+
+.hero button{
+    margin-top:30px;
+    padding:15px 40px;
+    border:none;
+    border-radius:30px;
+    background:#ff4d4d;
+    color:white;
+    font-size:18px;
+    cursor:pointer;
+}
+
+.hero button:hover{
+    background:white;
+    color:#ff4d4d;
+}
+
+/* MENU */
+.menu{
+    padding:120px 50px;
+}
+
+.menu h2{
+    text-align:center;
+    margin-bottom:50px;
+    font-size:40px;
+    color:#ff4d4d;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:30px;
+}
+
+.card{
+    background:rgba(255,255,255,0.05);
+    border-radius:20px;
+    overflow:hidden;
+    transition:0.4s;
+}
+
+.card img{
+    width:100%;
+    height:200px;
+    object-fit:cover;
+}
+
+.card-content{
+    padding:20px;
+}
+
+.price{
+    color:#ff4d4d;
+    font-weight:600;
+}
+
+.card button{
+    margin-top:15px;
+    width:100%;
+    padding:10px;
+    border:none;
+    border-radius:10px;
+    background:#ff4d4d;
+    color:white;
+    cursor:pointer;
+}
+
+.card button:hover{
+    background:white;
+    color:#ff4d4d;
+}
+
+.card:hover{
+    transform:translateY(-10px);
+}
+
+/* CART */
+.cart{
+    position:fixed;
+    right:0;
+    top:0;
+    width:320px;
+    height:100%;
+    background:#111827;
+    padding:20px;
+    overflow-y:auto;
+    border-left:2px solid #ff4d4d;
+}
+
+.cart h3{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+.cart-item{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:10px;
+}
+
+.total{
+    margin-top:20px;
+    font-weight:bold;
+    font-size:18px;
+}
+
+/* CONTACT */
+.contact{
+    padding:60px;
+    text-align:center;
+    background:#020617;
+}
+
+.contact h2{
+    color:#ff4d4d;
+    margin-bottom:20px;
+}
+
+footer{
+    text-align:center;
+    padding:20px;
+    background:#000;
+}
+</style>
+</head>
+
+<body>
+
+<div class="main-content">
+
+<nav>
+    <div class="logo">🔥 The Hungry Fork</div>
+    <ul>
+        <li onclick="scrollToMenu()">Menu</li>
+        <li onclick="scrollToContact()">Contact</li>
+    </ul>
+</nav>
+
+<section class="hero">
+    <h1>Welcome to Kitchen by Nikhil</h1>
+    <p>Delicious Indian Food with Premium Experience</p>
+    <button onclick="scrollToMenu()">Explore Menu</button>
+</section>
+
+<section class="menu" id="menu">
+    <h2>Our Delicious Menu</h2>
+    <div class="grid" id="food-container"></div>
+</section>
+
+<section class="contact" id="contact">
+    <h2>Contact Us</h2>
+    <p>📞 +91 8827147875</p>
+    <p>📧 nikhilzr1232gmail.com</p>
+</section>
+
+<footer>
+    © 2026 The Hungry Fork | Where taste meets tradition
+</footer>
+
+</div>
+
+<div class="cart">
+    <h3>🛒 Cart</h3>
+    <div id="cart-items"></div>
+    <div class="total">Total: ₹ <span id="total">0</span></div>
+</div>
+
+<script>
+const foods = [
+{ name:"Butter Chicken", price:350, img:"https://images.unsplash.com/photo-1603894584373-5ac82b2ae398" },
+{ name:"Paneer Tikka", price:280, img:"https://images.unsplash.com/photo-1596797038530-2c107aa6f8c5" },
+{ name:"Biryani", price:300, img:"https://images.unsplash.com/photo-1563379091339-03246963d51a" },
+{ name:"Masala Dosa", price:150, img:"https://images.unsplash.com/photo-1589302168068-964664d93dc0" },
+{ name:"Chole Bhature", price:180, img:"https://images.unsplash.com/photo-1627308595229-7830a5c91f9f" },
+{ name:"Gulab Jamun", price:120, img:"https://images.unsplash.com/photo-1601050690597-df0568f70950" },
+{ name:"Tandoori Chicken", price:400, img:"https://images.unsplash.com/photo-1604908176997-4317b2d7e4c4" },
+{ name:"Pizza", price:250, img:"https://images.unsplash.com/photo-1548365328-9f547fb0953e" },
+{ name:"Burger", price:180, img:"https://images.unsplash.com/photo-1550547660-d9450f859349" },
+{ name:"Ice Cream", price:90, img:"https://images.unsplash.com/photo-1497034825429-c343d7c6a68f" }
+];
+
+const container = document.getElementById("food-container");
+const cartItems = document.getElementById("cart-items");
+const totalSpan = document.getElementById("total");
+let total = 0;
+
+foods.forEach(food=>{
+    const card = document.createElement("div");
+    card.classList.add("card");
+    card.innerHTML = `
+        <img src="${food.img}">
+        <div class="card-content">
+            <h3>${food.name}</h3>
+            <p class="price">₹ ${food.price}</p>
+            <button onclick="addToCart('${food.name}',${food.price})">Add to Cart</button>
+        </div>
+    `;
+    container.appendChild(card);
+});
+
+function addToCart(name,price){
+    const div = document.createElement("div");
+    div.classList.add("cart-item");
+    div.innerHTML = `<span>${name}</span><span>₹ ${price}</span>`;
+    cartItems.appendChild(div);
+    total += price;
+    totalSpan.textContent = total;
+}
+
+function scrollToMenu(){
+    document.getElementById("menu").scrollIntoView({behavior:"smooth"});
+}
+
+function scrollToContact(){
+    document.getElementById("contact").scrollIntoView({behavior:"smooth"});
+}
+</script>
+
+</body>
+</html>
